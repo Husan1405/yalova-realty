@@ -196,7 +196,7 @@ app.use(express.json());
 
 app.get('/api/apartments', async (req, res) => res.json(await loadApartments()));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 async function start() {
   await initDatabase();
   app.listen(PORT, () => console.log(`🌐 API Server running on http://localhost:${PORT}`));
