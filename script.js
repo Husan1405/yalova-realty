@@ -692,9 +692,9 @@ const TELEGRAM_CHAT_ID = '766091630'; // личка @Khusan_2000
     
     let apartments = [];
 
-    // Загрузить квартиры из localStorage
+    // Загрузить квартиры из API
     function loadApartments() {
-        fetch('http://localhost:3000/api/apartments')
+        fetch('https://https-nedvijimost-yalova.onrender.com/api/apartments')
             .then(response => response.json())
             .then(data => {
                 apartments = data;
