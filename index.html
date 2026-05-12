@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f7f5f0">
+    <title>Турецкий рассвет — Недвижимость в Ялове, Турция</title>
+    <meta name="description" content="Продажа и аренда недвижимости в Ялове. Квартиры, виллы и инвестиции у Мраморного моря.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Прелоадер -->
+<div class="preloader" id="preloader">
+    <div class="preloader__inner">
+        <div class="preloader__circle"></div>
+        <div class="preloader__circle"></div>
+        <div class="preloader__circle"></div>
+    </div>
+    <div class="preloader__text">YALOVA</div>
+</div>
+
+<!-- Прогресс прокрутки -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Шапка -->
+<header class="header" id="header">
+    <div class="container header__inner">
+        <a href="#home" class="logo logo--image" aria-label="Турецкий рассвет — Ялова">
+            <img src="images/brand-logo.png" alt="Турецкий рассвет — Ялова">
+        </a>
+
+        <nav class="nav" id="nav">
+            <a href="#places" class="nav__link">Места</a>
+            <a href="#apartments" class="nav__link">Каталог квартир и объектов</a>
+            <a href="#sea" class="nav__link">Море</a>
+            <a href="#contacts" class="nav__link">Контакты</a>
+        </nav>
+
+        <a href="#contacts" class="btn btn--primary header__cta">Связаться</a>
+
+        <!-- Кнопка погоды в шапке -->
+        <button class="weather-trigger" id="weatherTrigger" aria-label="Погода">
+            <span id="triggerTemp">--°</span>
+            <div id="triggerIcon"></div>
+        </button>
+
+        <button class="burger" id="burger" aria-label="Меню">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<!-- Главный экран -->
+<section class="hero" id="home">
+    <div class="hero__bg">
+        <div class="hero__layer hero__layer--1"></div>
+        <div class="hero__layer hero__layer--2"></div>
+        <div class="hero__layer hero__layer--3"></div>
+        <div class="hero__waves">
+            <svg viewBox="0 0 1440 220" preserveAspectRatio="none">
+                <path class="wave wave--1" d="M0,128L48,138.7C96,149,192,171,288,160C384,149,480,107,576,112C672,117,768,171,864,176C960,181,1056,139,1152,128C1248,117,1344,139,1392,149.3L1440,160L1440,220L0,220Z"/>
+                <path class="wave wave--2" d="M0,160L60,165.3C120,171,240,181,360,170.7C480,160,600,128,720,138.7C840,149,960,203,1080,208C1200,213,1320,171,1380,149.3L1440,128L1440,220L0,220Z"/>
+                <path class="wave wave--3" d="M0,192L80,186.7C160,181,320,171,480,165.3C640,160,800,160,960,176C1120,192,1280,224,1360,240L1440,256L1440,220L0,220Z"/>
+            </svg>
+        </div>
+        <div class="hero__particles" id="particles"></div>
+    </div>
+
+    <div class="container hero__content">
+        <div class="hero__card fade-up">
+            <div class="hero__badge">
+                <span class="dot"></span> Недвижимость у Мраморного моря
+            </div>
+            <p class="hero__sub">
+                Квартиры, виллы и инвестиционные объекты в зелёном курортном городе
+                на берегу Мраморного моря — в часе паромом от Стамбула.
+            </p>
+        </div>
+        <div class="hero__actions fade-up">
+            <a href="#contacts" class="btn btn--primary">
+                <span>Связаться с нами</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#about" class="btn btn--ghost">Узнать о городе</a>
+        </div>
+
+        <div class="hero__stats fade-up">
+            <div class="stat">
+                <div class="stat__num" data-count="120">0</div>
+                <div class="stat__label">Объектов в продаже</div>
+            </div>
+            <div class="stat">
+                <div class="stat__num" data-count="98">0<span class="stat__suffix">%</span></div>
+                <div class="stat__label">Довольных клиентов</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero__scroll">
+        <span>Прокрутите</span>
+        <div class="hero__scroll-line"></div>
+    </div>
+</section>
+
+<!-- О городе -->
+<section class="section about" id="about">
+    <div class="container">
+        <div class="section__head reveal">
+            <span class="section__pre">О городе</span>
+            <h2 class="section__title">Ялова — <em>зелёная жемчужина</em> Мраморного моря</h2>
+        </div>
+
+        <div class="about__grid">
+            <div class="about__text reveal">
+                <p>
+                    <strong>Ялова</strong> — уютный курортный город на южном берегу
+                    Мраморного моря, всего в часе пути на пароме от Стамбула.
+                    Здесь сосны спускаются прямо к воде, а воздух наполнен запахом
+                    моря и хвои. Мягкий климат, чистые пляжи и горячие термальные
+                    источники сделали город любимым местом отдыха турок и
+                    иностранных гостей.
+                </p>
+                <p>
+                    Город стремительно развивается: новые жилые комплексы, набережные,
+                    парки и инфраструктура делают Ялову одним из самых перспективных
+                    направлений для инвестиций в недвижимость в Турции.
+                </p>
+
+                <div class="about__features">
+                    <div class="feature reveal">
+                        <div class="feature__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6M12 22v-3M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M22 12h-3M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"/></svg>
+                        </div>
+                        <h3>Термальные источники</h3>
+                        <p>Целебные воды, известные ещё с римских времён.</p>
+                    </div>
+                    <div class="feature reveal">
+                        <div class="feature__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 22s4-2 10-2 10 2 10 2M3 18c4-3 13-3 18 0M5 14c3-2 11-2 14 0M12 4v8M9 7l3-3 3 3"/></svg>
+                        </div>
+                        <h3>Сосновые леса</h3>
+                        <p>Город окружён зелёными холмами и национальным парком.</p>
+                    </div>
+                    <div class="feature reveal">
+                        <div class="feature__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 6c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>
+                        </div>
+                        <h3>Мраморное море</h3>
+                        <p>Тёплая, спокойная вода и чистые песчаные пляжи.</p>
+                    </div>
+                    <div class="feature reveal">
+                        <div class="feature__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        </div>
+                        <h3>Близость к Стамбулу</h3>
+                        <p>1 час паромом — и вы в центре крупнейшего мегаполиса.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about__visual reveal">
+                <div class="card-stack">
+                    <div class="card-photo card-photo--1">
+                        <div class="card-photo__inner" style="background-image: url('images/sea.jpg');">
+                            <span class="card-photo__tag">Море</span>
+                        </div>
+                    </div>
+                    <div class="card-photo card-photo--2">
+                        <div class="card-photo__inner" style="background-image: url('images/nature.webp');">
+                            <span class="card-photo__tag">Природа</span>
+                        </div>
+                    </div>
+                    <div class="card-photo card-photo--3">
+                        <div class="card-photo__inner" style="background-image: url('images/city.png');">
+                            <span class="card-photo__tag">Город</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Интересные места -->
+<section class="section places" id="places">
+    <div class="container">
+        <div class="section__head reveal">
+            <span class="section__pre">Интересные места</span>
+            <h2 class="section__title">Что <em>посмотреть</em> в Ялове</h2>
+            <p class="section__lead">Город маленький, но насыщенный — каждый уголок откроет новую историю.</p>
+        </div>
+
+        <div class="places__grid">
+            <article class="place reveal">
+                <div class="place__image" style="background-image: url('images/termal.jpg');">
+                    <span class="place__num">01</span>
+                </div>
+                <div class="place__body">
+                    <h3>Термал — Termal Kaplıcaları</h3>
+                    <p>Знаменитый термальный курорт в 12 км от центра. Минеральные ванны под открытым небом, исторические бани и хвойный воздух.</p>
+                </div>
+            </article>
+
+            <article class="place reveal">
+                <div class="place__image" style="background-image: url('images/arboretum.jpg');">
+                    <span class="place__num">02</span>
+                </div>
+                <div class="place__body">
+                    <h3>Караджа Арборетум</h3>
+                    <p>Один из крупнейших ботанических парков Турции — более 7 000 видов деревьев и кустарников со всего мира.</p>
+                </div>
+            </article>
+
+            <article class="place reveal">
+                <div class="place__image" style="background-image: url('images/ataturk.jpg');">
+                    <span class="place__num">03</span>
+                </div>
+                <div class="place__body">
+                    <h3>«Шагающий особняк» Ататюрка</h3>
+                    <p>Исторический деревянный дом, который буквально перенесли, чтобы сохранить чинар — символ бережного отношения к природе.</p>
+                </div>
+            </article>
+
+            <article class="place reveal">
+                <div class="place__image" style="background-image: url('images/sudusen.jpg');">
+                    <span class="place__num">04</span>
+                </div>
+                <div class="place__body">
+                    <h3>Водопад Судюшен</h3>
+                    <p>Прохладный водопад в горах Самандыра — отличное место для пеших прогулок и пикников среди сосен.</p>
+                </div>
+            </article>
+
+            <article class="place reveal">
+                <div class="place__image" style="background-image: url('images/promenade.jpg');">
+                    <span class="place__num">05</span>
+                </div>
+                <div class="place__body">
+                    <h3>Набережная Ялова</h3>
+                    <p>Уютный променад с кафе, ресторанами и видом на закат над морем — сердце вечерней жизни города.</p>
+                </div>
+            </article>
+
+            <article class="place reveal">
+                <div class="place__image" style="background-image: url('images/cinarcik.jpg');">
+                    <span class="place__num">06</span>
+                </div>
+                <div class="place__body">
+                    <h3>Деревня Чинарджик</h3>
+                    <p>Курортный посёлок западнее Яловы — пляжи, бухты и горные дороги с видами на Мраморное море.</p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- Каталог квартир -->
+<section class="section apartments" id="apartments">
+    <div class="container">
+        <div class="section__head reveal">
+            <span class="section__pre">Недвижимость</span>
+            <h2 class="section__title">Каталог <em>квартир</em> и объектов</h2>
+            <p class="section__lead">Изучайте доступные предложения или свяжитесь с нами для поиска идеального объекта.</p>
+        </div>
+
+        <div class="apartments__controls reveal">
+            <div class="apartments__filter">
+                <select id="filterType" class="apartments__select">
+                    <option value="">Все типы</option>
+                    <option value="apartment">Квартира</option>
+                    <option value="villa">Вилла</option>
+                    <option value="land">Земельный участок</option>
+                </select>
+                <select id="filterStatus" class="apartments__select">
+                    <option value="">Любой статус</option>
+                    <option value="sale">На продажу</option>
+                    <option value="rent">На аренду</option>
+                </select>
+            </div>
+            <div class="apartments__search">
+                <input type="text" id="searchApartments" class="apartments__input" placeholder="Поиск по названию или описанию...">
+            </div>
+        </div>
+
+        <div class="apartments__grid" id="apartmentsGrid">
+            <div class="apartments__empty reveal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <path d="M3 21h18M3 10h18M5 5h14a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2z"/>
+                    <path d="M9 14v4M15 14v4"/>
+                </svg>
+                <p>Каталог квартир пока пуст.</p>
+                <span class="apartments__empty-hint">Обновляется через Telegram бота</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Море -->
+<section class="section sea" id="sea">
+    <div class="sea__bg"></div>
+    <div class="container sea__inner">
+        <div class="sea__text reveal">
+            <span class="section__pre section__pre--light">Мраморное море</span>
+            <h2 class="section__title section__title--light">Тёплое море <em>у самого порога</em></h2>
+            <p>
+                Мраморное море — внутреннее море Турции, соединяющее Чёрное и Эгейское.
+                В Ялове его берега мягкие и пологие, вода прогревается с мая по октябрь,
+                а отсутствие сильных течений делает пляжи безопасными для семей с детьми.
+            </p>
+            <ul class="sea__list">
+                <li><span>22°C</span> — средняя температура воды летом</li>
+                <li><span>5+</span> — оборудованных пляжей вдоль побережья</li>
+                <li><span>30 мин</span> — до самых живописных бухт на машине</li>
+                <li><span>Круглый год</span> — морские прогулки и рыбалка</li>
+            </ul>
+        </div>
+        <div class="sea__visual reveal">
+            <div class="sea__circle">
+                <svg viewBox="0 0 200 200">
+                    <defs>
+                        <linearGradient id="seaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#05bfdb"/>
+                            <stop offset="100%" stop-color="#0a4d68"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="90" fill="url(#seaGrad)"/>
+                    <path class="sea__wave" d="M10,100 Q55,80 100,100 T190,100 V190 H10 Z" fill="rgba(255,255,255,0.15)"/>
+                    <path class="sea__wave sea__wave--2" d="M10,120 Q55,100 100,120 T190,120 V190 H10 Z" fill="rgba(255,255,255,0.2)"/>
+                </svg>
+                <div class="sea__sun"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Контакты -->
+<section class="section contacts" id="contacts">
+    <div class="container">
+        <div class="section__head reveal">
+            <span class="section__pre">Контакты</span>
+            <h2 class="section__title">Свяжитесь с <em>нами</em></h2>
+            <p class="section__lead">Подберём объект, организуем просмотр и сопроводим сделку под ключ.</p>
+        </div>
+
+        <div class="contacts__grid">
+            <a href="https://wa.me/905526426905" class="contact-card reveal" target="_blank" rel="noopener">
+                <div class="contact-card__icon contact-card__icon--brand">
+                    <img src="images/whatsapp.svg" alt="WhatsApp" loading="lazy">
+                </div>
+                <div class="contact-card__body">
+                    <span class="contact-card__label">WhatsApp</span>
+                    <span class="contact-card__value">+90 552 642 69 05</span>
+                </div>
+                <span class="contact-card__arrow">→</span>
+            </a>
+
+            <a href="https://max.ru/+995579036528" class="contact-card reveal" target="_blank" rel="noopener">
+                <div class="contact-card__icon contact-card__icon--brand">
+                    <img src="images/max.png" alt="MAX Messenger" loading="lazy">
+                </div>
+                <div class="contact-card__body">
+                    <span class="contact-card__label">Мессенджер MAX</span>
+                    <span class="contact-card__value">+995 579 03 65 28</span>
+                </div>
+                <span class="contact-card__arrow">→</span>
+            </a>
+
+            <div class="contact-card reveal">
+                <div class="contact-card__icon contact-card__icon--office">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg>
+                </div>
+                <div class="contact-card__body">
+                    <span class="contact-card__label">Офис в Ялове</span>
+                    <span class="contact-card__value">Gazi Paşa Cad. №48, Yalova</span>
+                </div>
+            </div>
+
+            <div class="contact-card reveal">
+                <div class="contact-card__icon contact-card__icon--time">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                </div>
+                <div class="contact-card__body">
+                    <span class="contact-card__label">Часы работы</span>
+                    <span class="contact-card__value">Пн–Сб: 09:00 – 19:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Подвал -->
+<footer class="footer">
+    <div class="container footer__inner">
+        <div class="footer__brand">
+            <a href="#home" class="logo logo--light">
+                <span class="logo__mark">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 28 L4 14 L16 4 L28 14 L28 28 Z"/>
+                        <path d="M12 28 L12 18 L20 18 L20 28"/>
+                    </svg>
+                </span>
+                <span class="logo__text">Турецкий <span>рассвет</span></span>
+            </a>
+            <p>Недвижимость в Ялове и на побережье Мраморного моря.</p>
+        </div>
+        <div class="footer__col">
+            <h4>Навигация</h4>
+            <a href="#places">Места</a>
+            <a href="#apartments">Каталог квартир</a>
+            <a href="#sea">Море</a>
+        </div>
+        <div class="footer__col">
+            <h4>Контакты</h4>
+            <a href="https://wa.me/905526426905" target="_blank" rel="noopener">WhatsApp: +90 552 642 69 05</a>
+            <a href="https://max.ru/+995579036528" target="_blank" rel="noopener">MAX: +995 579 03 65 28</a>
+            <span>Gazi Paşa Cad. №48, Yalova</span>
+            <span>Пн–Сб: 09:00 – 19:00</span>
+        </div>
+    </div>
+    <div class="footer__bottom container">
+        <span>© 2026 Турецкий рассвет. Все права защищены.</span>
+    </div>
+</footer>
+
+<!-- Лайтбокс -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" id="lightboxClose" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="lightbox__inner">
+        <img class="lightbox__img" id="lightboxImg" alt="">
+        <div class="lightbox__caption" id="lightboxCaption"></div>
+    </div>
+</div>
+
+<!-- Модальное окно погоды -->
+<div class="weather-modal" id="weatherModal" aria-hidden="true">
+    <button class="weather-modal__close" id="weatherModalClose">&times;</button>
+    <aside class="weather" id="weather" aria-label="Погода в Ялове">
+        <div class="weather__head">
+            <div class="weather__title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/>
+                    <circle cx="12" cy="9" r="2.5"/>
+                </svg>
+                <span>Ялова, Турция</span>
+            </div>
+            <span class="weather__status" id="weatherStatus">Загрузка…</span>
+        </div>
+
+        <div class="weather-now">
+            <div class="weather-now__icon" id="weatherIcon" aria-hidden="true"></div>
+            <div class="weather-now__main">
+                <div class="weather-now__temp">
+                    <span id="weatherTemp">—</span><span class="weather-now__unit">°C</span>
+                </div>
+                <div class="weather-now__desc" id="weatherDesc">—</div>
+            </div>
+            <div class="weather-now__meta">
+                <div><span>Ощущается</span><b id="weatherFeels">—</b></div>
+                <div><span>Влажность</span><b id="weatherHumidity">—</b></div>
+                <div><span>Ветер</span><b id="weatherWind">—</b></div>
+            </div>
+        </div>
+
+        <div class="weather-section">
+            <div class="weather-section__head">
+                <h3>Почасовой прогноз</h3>
+                <span class="weather-section__hint">← скролл →</span>
+            </div>
+            <div class="weather-hours" id="weatherHours" role="list"></div>
+        </div>
+
+        <div class="weather-section">
+            <div class="weather-section__head">
+                <h3>На 10 дней</h3>
+                <span class="weather-section__hint">← скролл →</span>
+            </div>
+            <div class="weather-days" id="weatherDays" role="list"></div>
+        </div>
+    </aside>
+</div>
+
+<!-- Кнопка службы поддержки --><button class="float-btn float-btn--support" id="supportBtn" aria-label="Служба поддержки" aria-haspopup="dialog" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+    </svg>
+</button>
+
+<!-- Окно службы поддержки -->
+<div class="support" id="support" role="dialog" aria-modal="false" aria-labelledby="supportTitle" aria-hidden="true">
+    <div class="support__head">
+        <div class="support__head-info">
+            <div class="support__avatar" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+            </div>
+            <div>
+                <div class="support__title" id="supportTitle">Служба поддержки</div>
+                <div class="support__sub">
+                    <span class="support__dot"></span>
+                    Обычно отвечаем в течение 15 минут
+                </div>
+            </div>
+        </div>
+        <button class="support__close" id="supportClose" aria-label="Закрыть">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+    </div>
+
+    <div class="support__body">
+        <div class="support__welcome">
+            <p>Здравствуйте! Расскажите, чем мы можем помочь — подберём объект, ответим по ценам или организуем просмотр.</p>
+        </div>
+
+        <form class="support__form" id="supportForm" novalidate>
+            <label class="support__field">
+                <span class="support__label">Ваше имя</span>
+                <input type="text" name="name" id="supportName" required autocomplete="name" placeholder="Как к вам обращаться">
+            </label>
+            <label class="support__field">
+                <span class="support__label">Телефон или e-mail</span>
+                <input type="text" name="contact" id="supportContact" required autocomplete="tel" placeholder="+90 ... или name@mail.com">
+            </label>
+            <label class="support__field">
+                <span class="support__label">Сообщение</span>
+                <textarea name="message" id="supportMessage" rows="3" required placeholder="Опишите ваш вопрос"></textarea>
+            </label>
+
+            <button type="submit" class="support__submit" id="supportSubmit">
+                <span class="support__submit-text">Отправить</span>
+                <svg class="support__submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+
+            <div class="support__status" id="supportStatus" role="status" aria-live="polite"></div>
+        </form>
+    </div>
+
+    <div class="support__foot">
+        Нажимая «Отправить», вы соглашаетесь с обработкой персональных данных.
+    </div>
+</div>
+
+
+<!-- Admin panel removed -->
+
+<!-- Admin script removed -->
+
+<script src="script.js"></script>
+</body>
+</html>
