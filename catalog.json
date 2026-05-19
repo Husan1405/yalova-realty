@@ -18,5 +18,23 @@
     "title": "Готовая квартира в Ялове — Чинарджик, район Тешвикие!  \n\n✨ Просторная 2+1, 110 м², с мебелью и техникой  \n🏢 Новый ситэ, 2‑й этаж, есть лифт  \n🏊 Бассейн и крытая парковка для удобства  \n🌴 До пляжа всего 350 метров — море рядом!",
     "price": "💰 Цена: 90.000 $  \n📌 Небольшой торг уместе",
     "status": "продажа"
+  },
+  {
+    "id": "1779215649853nqm3",
+    "createdAt": "2026-05-19T18:34:09.853Z",
+    "photos": [
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215631398_fa62fe89.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215633762_fa707166.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215636131_d3757a80.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215639761_a7b8fb2f.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215642458_64ad2b45.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215644484_2d1d2c0d.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215646459_93de9f66.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215648398_ce7aaf9d.jpg"
+    ],
+    "type": "квартира",
+    "title": "Готовая новая квартира в Ялове — район Чифтликкей!  \n\n✨ Просторная 3+1, 120 м², на 1‑м этаже  \n🌿 Большой балкон, тёплый пол, крытая парковка  \n🪑 Дому всего 2 года, вся мебель и техника — новые  \n📍 Район Чифтлик, рядом с ТЦ Özdilek — удобное расположение",
+    "price": "💰 Цена: 145.000 $",
+    "status": "продажа"
   }
 ]
