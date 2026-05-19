@@ -68,13 +68,20 @@ const counterObserver = new IntersectionObserver((entries) => {
             const target = parseInt(el.dataset.count, 10);
             const duration = 1800;
             const start = performance.now();
+            const suffix = el.querySelector('.stat__suffix');
+            // Текстовый узел для числа: первый дочерний, либо создаём в начале
+            let numNode = el.firstChild;
+            if (!numNode || numNode.nodeType !== Node.TEXT_NODE) {
+                numNode = document.createTextNode('0');
+                el.insertBefore(numNode, suffix || null);
+            }
 
             function tick(now) {
                 const t = Math.min((now - start) / duration, 1);
                 const eased = 1 - Math.pow(1 - t, 3);
-                el.textContent = Math.floor(eased * target);
+                numNode.nodeValue = String(Math.floor(eased * target));
                 if (t < 1) requestAnimationFrame(tick);
-                else el.textContent = target;
+                else numNode.nodeValue = String(target);
             }
             requestAnimationFrame(tick);
             counterObserver.unobserve(el);
@@ -148,6 +155,12 @@ const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxCaption = document.getElementById('lightboxCaption');
 const lightboxClose = document.getElementById('lightboxClose');
+const lightboxPrev = document.getElementById('lightboxPrev');
+const lightboxNext = document.getElementById('lightboxNext');
+const lightboxCounter = document.getElementById('lightboxCounter');
+
+let lbItems = [];      // [{ src, caption }]
+let lbIndex = 0;
 
 function extractBgUrl(el) {
     const bg = getComputedStyle(el).backgroundImage;
@@ -155,20 +168,47 @@ function extractBgUrl(el) {
     return m ? m[2] : null;
 }
 
+function renderLightboxItem() {
+    const item = lbItems[lbIndex];
+    if (!item) return;
+    lightboxImg.classList.remove('is-zoomed');
+    lightboxImg.src = item.src;
+    lightboxImg.alt = item.caption || '';
+    lightboxCaption.textContent = item.caption || '';
+
+    const multi = lbItems.length > 1;
+    lightboxPrev.hidden = !multi;
+    lightboxNext.hidden = !multi;
+    lightboxCounter.hidden = !multi;
+    if (multi) lightboxCounter.textContent = `${lbIndex + 1} / ${lbItems.length}`;
+}
+
 function openLightbox(src, caption) {
     if (!src) return;
-    lightboxImg.src = src;
-    lightboxImg.alt = caption || '';
-    lightboxCaption.textContent = caption || '';
+    openLightboxGallery([{ src, caption: caption || '' }], 0);
+}
+
+function openLightboxGallery(items, startIndex = 0) {
+    if (!items || !items.length) return;
+    lbItems = items;
+    lbIndex = Math.max(0, Math.min(startIndex, items.length - 1));
+    renderLightboxItem();
     lightbox.classList.add('is-open');
     lightbox.setAttribute('aria-hidden', 'false');
     document.body.classList.add('lightbox-open');
+}
+
+function showLightboxAt(i) {
+    if (!lbItems.length) return;
+    lbIndex = (i + lbItems.length) % lbItems.length;
+    renderLightboxItem();
 }
 
 function closeLightbox() {
     lightbox.classList.remove('is-open');
     lightbox.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('lightbox-open');
+    lightboxImg.classList.remove('is-zoomed');
 }
 
 // карточки мест
@@ -190,13 +230,46 @@ document.querySelectorAll('.card-photo').forEach(card => {
 // закрытие
 lightboxClose.addEventListener('click', closeLightbox);
 lightbox.addEventListener('click', (e) => {
+    // Клик по фону или по обёртке (но НЕ по фото/кнопкам) — закрыть
     if (e.target === lightbox || e.target.classList.contains('lightbox__inner')) {
         closeLightbox();
     }
 });
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+
+// Навигация в галерее
+lightboxPrev.addEventListener('click', (e) => { e.stopPropagation(); showLightboxAt(lbIndex - 1); });
+lightboxNext.addEventListener('click', (e) => { e.stopPropagation(); showLightboxAt(lbIndex + 1); });
+
+// Клик по фото — переключить зум (открыть «в масштабе»)
+lightboxImg.addEventListener('click', (e) => {
+    e.stopPropagation();
+    lightboxImg.classList.toggle('is-zoomed');
 });
+
+document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('is-open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    else if (e.key === 'ArrowLeft' && lbItems.length > 1) showLightboxAt(lbIndex - 1);
+    else if (e.key === 'ArrowRight' && lbItems.length > 1) showLightboxAt(lbIndex + 1);
+});
+
+// Свайп для лайтбокса на мобилке
+(() => {
+    let sx = 0, sy = 0, tracking = false;
+    lightbox.addEventListener('touchstart', (e) => {
+        if (lightboxImg.classList.contains('is-zoomed')) return;
+        sx = e.touches[0].clientX; sy = e.touches[0].clientY; tracking = true;
+    }, { passive: true });
+    lightbox.addEventListener('touchend', (e) => {
+        if (!tracking) return;
+        tracking = false;
+        const dx = e.changedTouches[0].clientX - sx;
+        const dy = e.changedTouches[0].clientY - sy;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) && lbItems.length > 1) {
+            showLightboxAt(dx < 0 ? lbIndex + 1 : lbIndex - 1);
+        }
+    });
+})();
 
 // === Виджет погоды (Open-Meteo, без API-ключа) ===
 (() => {
@@ -691,24 +764,75 @@ const TELEGRAM_CHAT_ID = '766091630'; // личка @Khusan_2000
     const searchInput = document.getElementById('searchApartments');
     
     let apartments = [];
+    const CATALOG_URL = (window.CATALOG_URL || '').trim();
+    const BOT_HOST = (window.BOT_API_HOST || '').replace(/\/$/, '');
 
-    // Загрузить квартиры из API
-    function loadApartments() {
-        fetch('https://https-nedvijimost-yalova.onrender.com/api/apartments')
-            .then(response => response.json())
-            .then(data => {
-                apartments = data;
-                renderApartments();
-            })
-            .catch(e => {
-                console.error('Failed to load apartments:', e);
-                apartments = [];
-            });
+    const TYPE_MAP = { 'квартира': 'apartment', 'вилла': 'villa', 'участок': 'land' };
+    const STATUS_MAP = { 'продажа': 'sale', 'аренда': 'rent' };
+
+    function isHttpUrl(v) {
+        return typeof v === 'string' && /^https?:\/\//i.test(v);
     }
-    // Сохранить квартиры в localStorage
-    function saveApartments() {
-        localStorage.setItem('apartments', JSON.stringify(apartments));
+
+    // Готовый URL → используем как есть. Старый file_id → через бот-прокси.
+    function photoUrl(value) {
+        if (!value) return '';
+        if (isHttpUrl(value)) return value;
+        if (!BOT_HOST) return '';
+        return `${BOT_HOST}/api/photo/${encodeURIComponent(value)}`;
+    }
+
+    // Нормализуем запись каталога: сырой формат бота → поля для UI.
+    function normalize(a) {
+        return {
+            id: a.id,
+            type: TYPE_MAP[a.type] || a.type,
+            status: STATUS_MAP[a.status] || a.status,
+            title: a.title || '',
+            description: a.description || '',
+            price: a.price || '',
+            area: a.area || '',
+            rooms: a.rooms || '',
+            photos: a.photos || [],
+        };
+    }
+
+    function applyData(data) {
+        const list = (Array.isArray(data) ? data : []).map(normalize);
+        apartments = list.map((a) => {
+            const images = (a.photos || []).map(photoUrl).filter(Boolean);
+            return { ...a, image: images[0] || '', images };
+        });
         renderApartments();
+    }
+
+    async function loadApartments() {
+        // 1) Главный путь: статичный catalog.json через CDN — работает с любого
+        //    устройства/хостинга и переживает оффлайн-бот.
+        if (CATALOG_URL) {
+            try {
+                const url = CATALOG_URL + (CATALOG_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
+                const r = await fetch(url, { cache: 'no-cache' });
+                if (r.ok) {
+                    applyData(await r.json());
+                    return;
+                }
+                console.warn('Catalog CDN fetch failed:', r.status);
+            } catch (e) {
+                console.warn('Catalog CDN error:', e.message);
+            }
+        }
+        // 2) Фолбэк: прямой запрос к боту по локальному API (если задан BOT_API_HOST).
+        if (BOT_HOST) {
+            try {
+                const r = await fetch(`${BOT_HOST}/api/apartments`);
+                if (r.ok) { applyData(await r.json()); return; }
+            } catch (e) {
+                console.warn('Bot API error:', e.message);
+            }
+        }
+        // 3) Нет источников — пустой каталог.
+        applyData([]);
     }
 
     // Отобразить квартиры с фильтрацией
@@ -740,47 +864,128 @@ const TELEGRAM_CHAT_ID = '766091630'; // личка @Khusan_2000
             return;
         }
 
-        gridContainer.innerHTML = filtered.map(apt => `
-            <article class="apartment-card reveal">
-                <div class="apartment-card__image" ${apt.image ? `style="background-image: url('${apt.image}')"` : ''}>
-                    ${!apt.image ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M3 10h18M5 5h14a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2z"/><path d="M9 14v4M15 14v4"/></svg>' : ''}
-                </div>
-                <div class="apartment-card__badge">
-                    ${apt.status === 'sale' ? 'На продажу' : 'На аренду'}
-                </div>
-                <div class="apartment-card__content">
-                    <div class="apartment-card__type">${apt.type === 'apartment' ? 'Квартира' : apt.type === 'villa' ? 'Вилла' : 'Участок'}</div>
-                    <h3 class="apartment-card__title">${apt.title}</h3>
-                    <p class="apartment-card__description">${apt.description}</p>
-                    <div class="apartment-card__price">${apt.price}</div>
-                    ${apt.rooms || apt.area ? `
-                        <div class="apartment-card__details">
-                            ${apt.rooms ? `
-                                <div class="apartment-card__detail">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                                    ${apt.rooms} комн.
-                                </div>
-                            ` : ''}
-                            ${apt.area ? `
-                                <div class="apartment-card__detail">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-                                    ${apt.area} м²
-                                </div>
-                            ` : ''}
+        gridContainer.innerHTML = filtered.map(apt => {
+            const photos = (apt.images && apt.images.length)
+                ? apt.images
+                : (apt.image ? [apt.image] : []);
+            const multi = photos.length > 1;
+
+            const galleryHTML = photos.length ? `
+                <div class="apartment-card__gallery"${multi ? ' data-multi="1"' : ''}>
+                    <div class="apartment-card__slides">
+                        ${photos.map((src, i) => `
+                            <div class="apartment-card__slide${i === 0 ? ' is-active' : ''}"
+                                 style="background-image: url('${src}')"
+                                 data-src="${src}"
+                                 data-index="${i}"></div>
+                        `).join('')}
+                    </div>
+                    ${multi ? `
+                        <button class="apartment-card__nav apartment-card__nav--prev" type="button" aria-label="Предыдущее фото">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        </button>
+                        <button class="apartment-card__nav apartment-card__nav--next" type="button" aria-label="Следующее фото">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
+                        <div class="apartment-card__counter"><span class="apartment-card__counter-current">1</span> / ${photos.length}</div>
+                        <div class="apartment-card__dots">
+                            ${photos.map((_, i) => `<button class="apartment-card__dot${i === 0 ? ' is-active' : ''}" type="button" data-index="${i}" aria-label="Фото ${i + 1}"></button>`).join('')}
                         </div>
                     ` : ''}
-                    <div class="apartment-card__actions">
-                        <a href="#contacts" class="apartment-card__btn">Узнать подробнее</a>
-                        <button class="apartment-card__btn" onclick="window.deleteApartment('${apt.id}')" style="background: #fde8e8; color: #c0392b; border-color: #c0392b;">Удалить</button>
-                    </div>
                 </div>
-            </article>
-        `).join('');
+            ` : `
+                <div class="apartment-card__image">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M3 10h18M5 5h14a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2z"/><path d="M9 14v4M15 14v4"/></svg>
+                </div>
+            `;
 
-        // Переинициализировать анимации для новых элементов
-        const newItems = document.querySelectorAll('.apartment-card');
-        newItems.forEach(item => {
-            observer.observe(item);
+            return `
+                <article class="apartment-card reveal">
+                    ${galleryHTML}
+                    <div class="apartment-card__badge">
+                        ${apt.status === 'sale' ? 'На продажу' : 'На аренду'}
+                    </div>
+                    <div class="apartment-card__content">
+                        <div class="apartment-card__type">${apt.type === 'apartment' ? 'Квартира' : apt.type === 'villa' ? 'Вилла' : 'Участок'}</div>
+                        <h3 class="apartment-card__title">${apt.title}</h3>
+                        <p class="apartment-card__description">${apt.description}</p>
+                        <div class="apartment-card__price">${apt.price}</div>
+                        ${apt.rooms || apt.area ? `
+                            <div class="apartment-card__details">
+                                ${apt.rooms ? `
+                                    <div class="apartment-card__detail">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                        ${apt.rooms} комн.
+                                    </div>
+                                ` : ''}
+                                ${apt.area ? `
+                                    <div class="apartment-card__detail">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                                        ${apt.area} м²
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                        <div class="apartment-card__actions">
+                            <a href="#contacts" class="apartment-card__btn">Узнать подробнее</a>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }).join('');
+
+        // Активировать слайдер и анимации для свежеотрисованных карточек
+        document.querySelectorAll('.apartment-card__gallery').forEach(initApartmentGallery);
+        document.querySelectorAll('.apartment-card').forEach(item => observer.observe(item));
+    }
+
+    function initApartmentGallery(gallery) {
+        const slides = Array.from(gallery.querySelectorAll('.apartment-card__slide'));
+        if (slides.length === 0) return;
+
+        const dots = Array.from(gallery.querySelectorAll('.apartment-card__dot'));
+        const counter = gallery.querySelector('.apartment-card__counter-current');
+        const prevBtn = gallery.querySelector('.apartment-card__nav--prev');
+        const nextBtn = gallery.querySelector('.apartment-card__nav--next');
+
+        let idx = 0;
+        function show(i) {
+            idx = (i + slides.length) % slides.length;
+            slides.forEach((s, j) => s.classList.toggle('is-active', j === idx));
+            dots.forEach((d, j) => d.classList.toggle('is-active', j === idx));
+            if (counter) counter.textContent = String(idx + 1);
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); show(idx - 1); });
+        if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); show(idx + 1); });
+        dots.forEach((d) => d.addEventListener('click', (e) => {
+            e.stopPropagation();
+            show(Number(d.dataset.index) || 0);
+        }));
+
+        // Свайп на мобилке
+        if (slides.length > 1) {
+            let startX = 0, startY = 0, tracking = false;
+            gallery.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                tracking = true;
+            }, { passive: true });
+            gallery.addEventListener('touchend', (e) => {
+                if (!tracking) return;
+                tracking = false;
+                const dx = e.changedTouches[0].clientX - startX;
+                const dy = e.changedTouches[0].clientY - startY;
+                if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+                    show(dx < 0 ? idx + 1 : idx - 1);
+                }
+            });
+        }
+
+        // Клик по фото — открыть всю серию в лайтбоксе на текущем кадре
+        const items = slides.map((s) => ({ src: s.dataset.src, caption: '' }));
+        slides.forEach((slide, i) => {
+            slide.addEventListener('click', () => openLightboxGallery(items, i));
         });
     }
 
@@ -791,29 +996,6 @@ const TELEGRAM_CHAT_ID = '766091630'; // личка @Khusan_2000
 
     // Загрузить при инициализации
     loadApartments();
-
-    // Экспортировать функцию удаления в глобальное пространство
-    window.deleteApartment = function(id) {
-        if (confirm('Вы уверены, что хотите удалить эту квартиру?')) {
-            apartments = apartments.filter(apt => apt.id !== id);
-            saveApartments();
-        }
-    };
-
-    // Экспортировать функцию добавления для использования ботом
-    window.addApartment = function(apartmentData) {
-        const newApt = {
-            id: Date.now().toString(),
-            ...apartmentData,
-            timestamp: new Date().toISOString()
-        };
-        apartments.push(newApt);
-        saveApartments();
-        return newApt;
-    };
-
-    // Экспортировать функцию получения квартир
-    window.getApartments = function() {
-        return apartments;
-    };
+    // Перезагружать каталог каждые 60с, чтобы подхватывать изменения из бота
+    setInterval(loadApartments, 60 * 1000);
 })();

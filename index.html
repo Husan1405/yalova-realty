@@ -428,9 +428,16 @@
 
 <!-- Лайтбокс -->
 <div class="lightbox" id="lightbox" aria-hidden="true">
-    <button class="lightbox__close" id="lightboxClose" aria-label="Закрыть">
+    <button class="lightbox__close" id="lightboxClose" type="button" aria-label="Закрыть">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
+    <button class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" type="button" aria-label="Предыдущее фото" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="lightbox__nav lightbox__nav--next" id="lightboxNext" type="button" aria-label="Следующее фото" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <div class="lightbox__counter" id="lightboxCounter" hidden></div>
     <div class="lightbox__inner">
         <img class="lightbox__img" id="lightboxImg" alt="">
         <div class="lightbox__caption" id="lightboxCaption"></div>
@@ -551,6 +558,14 @@
 
 <!-- Admin script removed -->
 
+<script>
+  // Источник данных каталога: публичный CDN над GitHub-репо.
+  // Бот пушит catalog.json и photos/ туда — сайт работает с любого хостинга и устройства.
+  window.CATALOG_URL = 'https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/catalog.json';
+  // Фолбэк для совместимости со старыми записями, где в photos[] лежал file_id (не URL).
+  // Можно оставить пустым, если все записи мигрированы.
+  window.BOT_API_HOST = '';
+</script>
 <script src="script.js"></script>
 </body>
 </html>
