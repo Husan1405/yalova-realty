@@ -2130,6 +2130,7 @@ body.lightbox-open { overflow: hidden; }
     margin-bottom: 14px;
     flex: 1;
     font-weight: 700;
+    white-space: pre-wrap;
 }
 
 .apartment-card__price {
