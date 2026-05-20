@@ -1,7 +1,6 @@
 import { Telegraf, Markup } from 'telegraf';
 import { isAuthed, tryLogin, logout } from './session.js';
 import * as store from './store.js';
-import { parseCaption, missingFields, REQUIRED_FIELDS } from './parser.js';
 import { uploadPhotoArray } from './photos.js';
 
 const MAIN_MENU = Markup.keyboard([
@@ -52,15 +51,19 @@ const mediaGroups = new Map();
 // 2.5с тишины, чтобы дождаться всех фото даже на медленном соединении.
 const MG_FLUSH_MS = 2500;
 
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
 function formatDraft(d) {
   const lines = [];
-  if (d.type) lines.push(`Тип: ${d.type}`);
-  if (d.title) lines.push(`Заголовок: ${d.title}`);
-  if (d.price) lines.push(`Цена: ${d.price}`);
-  if (d.status) lines.push(`Статус: ${d.status}`);
-  if (d.area) lines.push(`Площадь: ${d.area}`);
-  if (d.rooms) lines.push(`Комнаты: ${d.rooms}`);
-  if (d.description) lines.push(`\n${d.description}`);
+  if (d.type) lines.push(`Тип: ${escapeHtml(d.type)}`);
+  if (d.title) lines.push(`Заголовок: ${escapeHtml(d.title)}`);
+  if (d.price) lines.push(`Цена: ${escapeHtml(d.price)}`);
+  if (d.status) lines.push(`Статус: ${escapeHtml(d.status)}`);
+  if (d.area) lines.push(`Площадь: ${escapeHtml(d.area)}`);
+  if (d.rooms) lines.push(`Комнаты: ${escapeHtml(d.rooms)}`);
+  if (d.description) lines.push(`\n<b>${escapeHtml(d.description)}</b>`);
   lines.push(`\nФото: ${(d.photos || []).length}`);
   return lines.join('\n');
 }
@@ -106,7 +109,7 @@ async function nextAddStep(ctx, st) {
   if (field === 'description') return ctx.reply('Шаг 7/9. Описание (или "—" чтобы пропустить):');
   if (field === 'photos') return ctx.reply('Шаг 8/9. Пришлите фото (можно несколько). Когда закончите — напишите "готово".');
   if (field === 'confirm') {
-    return ctx.reply(`Шаг 9/9. Превью:\n\n${formatDraft(st.draft)}\n\nСохранить?`, previewKeyboard('add'));
+    return ctx.reply(`Шаг 9/9. Превью:\n\n${formatDraft(st.draft)}\n\nСохранить?`, { parse_mode: 'HTML', ...previewKeyboard('add') });
   }
 }
 
@@ -218,9 +221,8 @@ async function handleEditPhoto(ctx, st) {
 
 // === IMPORT flow (forwarded posts / direct photos with caption) ===
 function processIncomingPhotos(ctx, photos, caption) {
-  const parsed = parseCaption(caption);
-  const draft = { ...parsed, photos };
-  const missing = missingFields(draft);
+  const draft = { description: (caption || '').trim(), photos };
+  const missing = ['status'];
   setState(ctx.chat.id, { mode: 'import', step: 0, draft, missingQueue: missing });
   return continueImportFlow(ctx);
 }
@@ -235,7 +237,7 @@ async function continueImportFlow(ctx) {
     const [text, kb] = askMissingPrompt(field);
     return kb ? ctx.reply(text, kb) : ctx.reply(text);
   }
-  return ctx.reply(`Превью:\n\n${formatDraft(st.draft)}\n\nСохранить?`, previewKeyboard('import'));
+  return ctx.reply(`Превью:\n\n${formatDraft(st.draft)}\n\nСохранить?`, { parse_mode: 'HTML', ...previewKeyboard('import') });
 }
 
 async function handleImportText(ctx, st) {

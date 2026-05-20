@@ -1820,7 +1820,7 @@ body.lightbox-open { overflow: hidden; }
     .apartment-card__gallery { height: 240px; border-radius: 16px; }
     .apartment-card__content { padding: 18px 10px 10px; }
     .apartment-card__title { font-size: 17px; }
-    .apartment-card__description { font-size: 14px; line-height: 1.55; }
+    .apartment-card__description { font-size: 17px; line-height: 1.4; font-weight: 700; }
     .apartment-card__price { font-size: 20px; }
     .apartment-card__btn {
         padding: 14px 16px;
@@ -2124,12 +2124,12 @@ body.lightbox-open { overflow: hidden; }
 }
 
 .apartment-card__description {
-    font-size: 13px;
-    color: var(--ink-2);
-    line-height: 1.55;
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.4;
     margin-bottom: 14px;
     flex: 1;
-    font-weight: 500;
+    font-weight: 700;
 }
 
 .apartment-card__price {
