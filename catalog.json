@@ -47,6 +47,7 @@
       "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779290592414_31e4bbf1.jpg",
       "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779290594403_f28b9ef3.jpg"
     ],
-    "status": "продажа"
+    "status": "продажа",
+    "type": "квартира"
   }
 ]
