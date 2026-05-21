@@ -1,1 +1,66 @@
-[]
+[
+  {
+    "id": "1779207199781cahv",
+    "createdAt": "2026-05-19T16:13:19.781Z",
+    "photos": [
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215178047_ab8a9913.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215180662_1a687020.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215182657_0b2f56b1.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215184726_a982ac43.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215188356_e0f0b0a7.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215190470_5532b208.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215192416_e73bba7d.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215194440_0e837799.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215196392_f75ab9e8.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215198162_6f83617f.jpg"
+    ],
+    "type": "квартира",
+    "title": "Готовая квартира в Ялове — Чинарджик, район Тешвикие!  \n\n✨ Просторная 2+1, 110 м², с мебелью и техникой  \n🏢 Новый ситэ, 2‑й этаж, есть лифт  \n🏊 Бассейн и крытая парковка для удобства  \n🌴 До пляжа всего 350 метров — море рядом!",
+    "price": "💰 Цена: 90.000 $  \n📌 Небольшой торг уместен",
+    "status": "продажа"
+  },
+  {
+    "id": "1779215649853nqm3",
+    "createdAt": "2026-05-19T18:34:09.853Z",
+    "photos": [
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215631398_fa62fe89.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215633762_fa707166.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215636131_d3757a80.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215639761_a7b8fb2f.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215642458_64ad2b45.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215644484_2d1d2c0d.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215646459_93de9f66.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779215648398_ce7aaf9d.jpg"
+    ],
+    "type": "квартира",
+    "title": "Готовая новая квартира в Ялове — район Чифтликкей!  \n\n✨ Просторная 3+1, 120 м², на 1‑м этаже  \n🌿 Большой балкон, тёплый пол, крытая парковка  \n🪑 Дому всего 2 года, вся мебель и техника — новые  \n📍 Район Чифтлик, рядом с ТЦ Özdilek — удобное расположение",
+    "price": "💰 Цена: 145.000 $",
+    "status": "продажа"
+  },
+  {
+    "id": "17792905964166j5d",
+    "createdAt": "2026-05-20T15:23:16.416Z",
+    "description": "Квартира 1+1 в новом доме с бассейном 🏡  \n\n✨ Новый дом в районе Мустафакемальпаша, центр Ялова  \n✨ 2‑й этаж, площадь 60 м²  \n✨ Современная планировка: открытая кухня  \n✨ Тёплый пол для комфорта  \n✨ Лифт и крытая парковка  \n✨ Бассейн в комплексе для отдыха и спорта  \n\n🌊 До причала İDO всего 10 минут  \n💎 Цена: 62.000 $",
+    "photos": [
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779290588503_b72e9cb6.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779290590719_cecbfdd6.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779290592414_31e4bbf1.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779290594403_f28b9ef3.jpg"
+    ],
+    "status": "продажа",
+    "type": "квартира"
+  },
+  {
+    "id": "1779297002971p4m9",
+    "createdAt": "2026-05-20T17:10:02.971Z",
+    "description": "",
+    "photos": [
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779296996046_553521de.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779296997741_3e45afca.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779296999303_1698272e.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1779297001084_3597cf8c.jpg"
+    ],
+    "status": "аренда",
+    "title": "АРЕНДА — Ялова, Чифтликкей, район Мехмет Акиф  \n\n🏢 Новая квартира 1+1, на 2‑м этаже, есть лифт  \n📍 Ситэ Видишехир — современный комплекс  \n🏊 Крытый и открытый бассейн  \n💪 Фитнес‑зал, SPA  \n👨‍👩‍👧‍👦 Детские и спортивные площадки  \n🚗 Крытая парковка  \n\n💰 Цена: 500 $ + комиссия + депози"
+  }
+]

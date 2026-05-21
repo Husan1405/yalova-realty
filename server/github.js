@@ -37,6 +37,19 @@ async function getSha(path) {
   return data.sha || null;
 }
 
+// Скачивает содержимое файла с ветки (как строку utf8). Возвращает null, если файла нет.
+export async function getFile(path) {
+  const c = cfg();
+  if (!c) return null;
+  const url = `${API}/repos/${c.owner}/${c.repo}/contents/${encodeURI(path)}?ref=${encodeURIComponent(c.branch)}`;
+  const res = await fetch(url, { headers: headers(c.token) });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`GitHub getFile ${path}: HTTP ${res.status}`);
+  const data = await res.json();
+  if (!data.content) return null;
+  return Buffer.from(data.content, data.encoding || 'base64').toString('utf8');
+}
+
 // Создаёт или обновляет файл. content — Buffer | string.
 export async function putFile(path, content, message) {
   const c = cfg();
