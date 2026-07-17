@@ -73,5 +73,20 @@
     "status": "аренда",
     "title": "АРЕНДА — Ялова, Чифтликкей, район Мехмет Акиф  \n\n🏢 Новая квартира 1+1, на 2‑м этаже, есть лифт  \n📍 Ситэ Видишехир — современный комплекс  \n🏊 Крытый и открытый бассейн  \n💪 Фитнес‑зал, SPA  \n👨‍👩‍👧‍👦 Детские и спортивные площадки  \n🚗 Крытая парковка  \n\n💰 Цена: 500 $ + комиссия + депози",
     "type": "квартира"
+  },
+  {
+    "id": "1784308526808trwj",
+    "createdAt": "2026-07-17T17:15:26.808Z",
+    "description": "",
+    "photos": [
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1784308513137_36ba7a6e.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1784308515335_bed98e94.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1784308517306_f5953a8d.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1784308519359_44bb6003.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1784308521371_e17b22dc.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1784308523323_dfb76158.jpg",
+      "https://cdn.jsdelivr.net/gh/Husan1405/yalova-realty@main/photos/1784308525386_9c0134a7.jpg"
+    ],
+    "status": "продажа"
   }
 ]
