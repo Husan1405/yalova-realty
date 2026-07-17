@@ -22,21 +22,24 @@ if (!ADMIN_PASSWORD) {
 const bot = createBot(BOT_TOKEN, ADMIN_PASSWORD);
 const app = createApi(bot);
 
-// Запуск polling с бесконечным ретраем: если getUpdates упал (например 409
-// Conflict при кратком наложении поллеров), ждём и пробуем снова, а не падаем.
+let shuttingDown = false;
+let retryTimer = null;
+
+// Запуск polling с ретраем при транзиентном 409 (Conflict: terminated by other
+// getUpdates request). Такое случается на хостинге в момент пере-деплоя, когда
+// Telegram ещё несколько секунд держит прежний long-poll. Раньше bot.launch()
+// без catch давал unhandledRejection → краш. Теперь — контролируемый ретрай,
+// но с ЧИСТЫМ завершением по SIGTERM (см. shutdown), чтобы старый инстанс на
+// Render не оставался «бессмертным» и не блокировал новый.
 function launchWithRetry(attempt = 0) {
+  if (shuttingDown) return;
   bot.launch().catch((e) => {
-    const delay = Math.min(5000 + attempt * 2000, 30000);
+    if (shuttingDown) return;
+    const delay = Math.min(3000 + attempt * 2000, 20000);
     console.warn(`bot.launch failed (${e?.message}); retry in ${delay}ms`);
-    setTimeout(() => launchWithRetry(attempt + 1), delay);
+    retryTimer = setTimeout(() => launchWithRetry(attempt + 1), delay);
   });
 }
-
-// Последняя линия обороны: не даём необработанным промисам ронять процесс —
-// иначе один транзиентный сетевой сбой Telegram убивает бота на хостинге.
-process.on('unhandledRejection', (e) => {
-  console.warn('unhandledRejection:', e?.message || e);
-});
 
 async function start() {
   if (BASE_URL) {
@@ -46,10 +49,6 @@ async function start() {
     app.listen(PORT, () => console.log(`HTTP listening on :${PORT}, webhook ${BASE_URL}${webhookPath}`));
   } else {
     await bot.telegram.deleteWebhook().catch(() => {});
-    // Polling с ретраем: транзиентный 409 (Conflict: terminated by other
-    // getUpdates request) не должен ронять процесс. Такое бывает при рестарте
-    // на хостинге, когда Telegram ещё держит прежний long-poll несколько секунд.
-    // Раньше bot.launch() без catch давал unhandledRejection → краш → crash-loop.
     launchWithRetry();
     console.log('Bot started in polling mode');
     app.listen(PORT, () => console.log(`HTTP listening on http://localhost:${PORT}`));
@@ -68,5 +67,15 @@ start().catch((e) => {
   process.exit(1);
 });
 
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
+// Корректное завершение: гарантированно останавливаем polling и ВЫХОДИМ из
+// процесса. Без этого HTTP-сервер и таймер ретрая держали бы процесс живым,
+// и при пере-деплое на Render старый инстанс продолжал бы поллить, вечно
+// конфликтуя (409) с новым.
+function shutdown(sig) {
+  shuttingDown = true;
+  if (retryTimer) clearTimeout(retryTimer);
+  try { bot.stop(sig); } catch {}
+  process.exit(0);
+}
+process.once('SIGINT', () => shutdown('SIGINT'));
+process.once('SIGTERM', () => shutdown('SIGTERM'));
