@@ -23,23 +23,6 @@ const bot = createBot(BOT_TOKEN, ADMIN_PASSWORD);
 const app = createApi(bot);
 
 let shuttingDown = false;
-let retryTimer = null;
-
-// Запуск polling с ретраем при транзиентном 409 (Conflict: terminated by other
-// getUpdates request). Такое случается на хостинге в момент пере-деплоя, когда
-// Telegram ещё несколько секунд держит прежний long-poll. Раньше bot.launch()
-// без catch давал unhandledRejection → краш. Теперь — контролируемый ретрай,
-// но с ЧИСТЫМ завершением по SIGTERM (см. shutdown), чтобы старый инстанс на
-// Render не оставался «бессмертным» и не блокировал новый.
-function launchWithRetry(attempt = 0) {
-  if (shuttingDown) return;
-  bot.launch().catch((e) => {
-    if (shuttingDown) return;
-    const delay = Math.min(3000 + attempt * 2000, 20000);
-    console.warn(`bot.launch failed (${e?.message}); retry in ${delay}ms`);
-    retryTimer = setTimeout(() => launchWithRetry(attempt + 1), delay);
-  });
-}
 
 async function start() {
   if (BASE_URL) {
@@ -49,7 +32,18 @@ async function start() {
     app.listen(PORT, () => console.log(`HTTP listening on :${PORT}, webhook ${BASE_URL}${webhookPath}`));
   } else {
     await bot.telegram.deleteWebhook().catch(() => {});
-    launchWithRetry();
+    // ВАЖНО: bot.launch() вызывается РОВНО ОДИН раз. Если polling не удалось
+    // запустить (например 409 Conflict — другой инстанс ещё держит getUpdates
+    // во время пере-деплоя), НЕ пытаемся перезапустить launch внутри процесса:
+    // telegraf оставляет фоновый цикл опроса, и повторный launch() плодит
+    // несколько конкурирующих циклов В ОДНОМ процессе, которые бесконечно
+    // 409-ят друг друга. Вместо этого выходим — Render поднимет свежий
+    // одиночный процесс, и как только конкурент исчезнет, запуск пройдёт.
+    bot.launch().catch((e) => {
+      if (shuttingDown) return;
+      console.error(`bot.launch failed (${e?.message}); exiting for a clean restart`);
+      process.exit(1);
+    });
     console.log('Bot started in polling mode');
     app.listen(PORT, () => console.log(`HTTP listening on http://localhost:${PORT}`));
   }
@@ -67,13 +61,11 @@ start().catch((e) => {
   process.exit(1);
 });
 
-// Корректное завершение: гарантированно останавливаем polling и ВЫХОДИМ из
-// процесса. Без этого HTTP-сервер и таймер ретрая держали бы процесс живым,
-// и при пере-деплое на Render старый инстанс продолжал бы поллить, вечно
+// Корректное завершение: останавливаем polling и ВЫХОДИМ из процесса, чтобы при
+// пере-деплое на Render старый инстанс не оставался живым и не держал getUpdates,
 // конфликтуя (409) с новым.
 function shutdown(sig) {
   shuttingDown = true;
-  if (retryTimer) clearTimeout(retryTimer);
   try { bot.stop(sig); } catch {}
   process.exit(0);
 }
